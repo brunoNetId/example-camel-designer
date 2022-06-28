@@ -1,0 +1,29 @@
+<routes id="camel" xmlns="http://camel.apache.org/schema/spring">
+
+  <route id="route1">
+    <from uri="timer:timer-1?repeatCount=1" id="from-2"/>
+    <to uri="https://random-data-api.com:443/api/users/random_user?size=2" id="to-3"/>
+    <split id="split-7">
+      <jq>.[]?</jq>
+      <setProperty id="property-14" name="file-name">
+        <jq>.first_name+.last_name</jq>
+      </setProperty>
+      <to uri="https://random-data-api.com:443/api/phone_number/random_phone_number?httpMethod=GET" id="to-18"/>
+      <setProperty id="property-20" name="contact">
+        <simple>${body}</simple>
+      </setProperty>
+      <to uri="https://random-data-api.com:443/api/address/random_address?httpMethod=GET" id="to-22"/>
+      <pipeline id="to-24-pipeline">
+        <setBody id="to-24-map-tgt-payload-body">
+          <simple>Contact:
+${exchangeProperty.contact}
+
+Address:
+${body}</simple>
+        </setBody>
+        <toD uri="file:directory?fileName=${exchangeProperty.file-name}" id="to-24"/>
+      </pipeline>
+    </split>
+  </route>
+
+</routes>

@@ -1,0 +1,14 @@
+<routes id="camel" xmlns="http://camel.apache.org/schema/spring">
+
+  <route id="route1">
+    <from uri="timer:timer-1?repeatCount=1" id="from-2"/>
+    <pipeline id="to-3-pipeline">
+      <setHeader name="content-type" id="to-3-map-tgt-headers-content-type">
+        <simple></simple>
+      </setHeader>
+      <to uri="https://random-data-api.com:443/api/color/random_color?size=2&amp;is_xml=true" id="to-3"/>
+    </pipeline>
+    <log message="demo trace log-5: ${body}" id="log-5"/>
+  </route>
+
+</routes>
